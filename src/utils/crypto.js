@@ -1,4 +1,7 @@
+// Utility functions from
+// https://github.com/ScopeLift/stealth-address-sdk/tree/main/src/utils/crypto
 import * as secp256k1 from "@noble/secp256k1";
+import { hexToBytes } from "viem";
 
 function randomPrivateKey() {
   var randPrivateKey = secp.utils.randomPrivateKey();
@@ -33,6 +36,22 @@ export function generateRandomStealthMetaAddress() {
     "0x" + viewingPublicKey,
     stealthMetaAddress,
   ];
+}
+
+export function getSharedSecret(ephemeralPrivateKey, viewingPrivateKey) {
+  return secp.getSharedSecret(
+    ephemeralPrivateKey.replace("0x", ""),
+    viewingPrivateKey.replace("0x", "")
+  );
+}
+
+export function getStealthPublicKey({ spendingPublicKey, hashedSharedSecret }) {
+  const hashedSharedSecretPoint = secp.ProjectivePoint.fromPrivateKey(
+    hexToBytes(hashedSharedSecret)
+  );
+  return secp.ProjectivePoint.fromHex(spendingPublicKey.replace("0x", ""))
+    .add(hashedSharedSecretPoint)
+    .toRawBytes(false);
 }
 
 function uintArrayToHex(uintArray) {
