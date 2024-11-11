@@ -16,4 +16,21 @@ contract Registry {
         require(_sent, "Failed to send ether");
         deposits.push(stealthAddress);
     }
+
+    function getDeposits(uint _startIndex, uint _endIndex) public view returns (address[] memory) {
+        require(deposits.length > 0, "No deposits made yet.");
+        require(_endIndex <= deposits.length, "End index should be lesser than the no.of deposits.");
+        require(_startIndex != _endIndex, "End index should be greater than start index.");
+        uint endIndex = deposits.length;
+        if(_endIndex != 0) {
+            endIndex = _endIndex;
+        }
+        address[] memory _deposits = new address[](endIndex - _startIndex);
+        uint j = 0;
+        for(uint i = _startIndex; i < endIndex; i++) {
+            _deposits[j] = (deposits[i]);
+            j++;
+        }
+        return _deposits;
+    }
 }
