@@ -16,13 +16,14 @@ export const WithdrawTab = () => {
 
   async function fetchAllWithdraws() {
     try {
-      const registryContract = new web3.eth.Contract(RegistryABI, REGISTRY_CONTRACT);
+      const registryContract = new web3.eth.Contract(
+        RegistryABI,
+        REGISTRY_CONTRACT
+      );
       // const totalDeposits = await registryContract.methods.deposits().call();
       // console.log(totalDeposits)
       // Start index and end index should be cached on local storage and should be dynamically updated based on previous scan
-      const deposits = await registryContract.methods
-        .getDeposits(0, 2)
-        .call();
+      const deposits = await registryContract.methods.getDeposits(0, 2).call();
       console.log(deposits);
     } catch (error) {
       console.log({ error });
@@ -30,8 +31,7 @@ export const WithdrawTab = () => {
   }
   return (
     <div className="w-full p-8 rounded-lg bg-white text-black flex flex-col justify-between gap-8">
-      <h3 className="font-bold text-center w-full">Withdraw</h3>
-
+      <h3 className="font-extrabold text-center w-full">Withdraw</h3>
       <div className="flex flex-col gap-3 w-full">
         <p className="text-black flex items-center justify-between w-full">
           0x08901328390182901830830183080080

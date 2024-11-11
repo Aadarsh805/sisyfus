@@ -28,13 +28,15 @@ export default function page() {
     // 3. Store the stealthMetaData address into contract
     const stealthMetaAddress = stealthMetaData[4];
     console.log(stealthMetaAddress);
-    await updateStealthAddress(stealthMetaAddress);
+    const txHash = await updateStealthAddress(stealthMetaAddress);
 
     // 4. Store the generated metadata into local db
-    window.localStorage.setItem(
-      "stealthMetaData",
-      JSON.stringify({ data: stealthMetaData })
-    );
+    if (!!txHash) {
+      window.localStorage.setItem(
+        "stealthMetaData",
+        JSON.stringify({ data: stealthMetaData })
+      );
+    }
   };
 
   async function updateStealthAddress(stealthMetaAddress: string) {
@@ -49,16 +51,18 @@ export default function page() {
         {}
       );
       console.log({ tx });
+
       await tx.wait();
+      return tx.hash;
     } catch (error) {
       console.log({ error });
     }
   }
 
   return (
-    <div className="h-screen flex flex-col  w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
+    <div className="h-screen flex flex-col w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
       <AppNavbar />
-      <div className="flex flex-col justify-center items-center w-full h-[calc(100vh-16rem)] gap-6">
+      <div className="flex flex-col justify-start items-center w-full mt-20 gap-6">
         {myStealthMetaDataString ? (
           <AppTabs />
         ) : (

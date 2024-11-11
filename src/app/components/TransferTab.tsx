@@ -16,7 +16,7 @@ import { REGISTRY_CONTRACT } from "@/constants";
 export const TransferTab = () => {
   const [recipientStealthAddress, setRecipientStealthAddress] = useState("");
   const [transferAmount, setTransferAmount] = useState(0);
-  const [transactionHash, setTransactionHash] = useState(0);
+  const [transactionHash, setTransactionHash] = useState("");
   const [uiError, setUiError] = useState("");
   const signer = useEthersSigner();
 
@@ -86,26 +86,32 @@ export const TransferTab = () => {
   };
 
   return (
-    <div className="w-full p-16 rounded-lg bg-white text-black flex flex-col justify-between gap-8">
-      <h3 className="font-bold text-center w-full">Transfer</h3>
+    <div className="w-full h-full p-8 rounded-lg bg-white text-black flex flex-col justify-between gap-8">
+      <h3 className="font-extrabold text-center w-full">Transfer</h3>
       <Input
         type="text"
         onChange={handleInputChange}
         value={recipientStealthAddress}
         placeholder="Recipient Stealth Meta Address"
       />
-      <Input
-        type="number"
-        onChange={handleTransferAmountInputChange}
-        value={transferAmount}
-        placeholder="Recipient Stealth Meta Address"
-      />
+      <div className="flex gap-2 items-end justify-end">
+        <Input
+          type="number"
+          onChange={handleTransferAmountInputChange}
+          value={transferAmount}
+          placeholder="Recipient Stealth Meta Address"
+          className="w-full"
+        />
+        <span className="">cBtc</span>
+      </div>
 
       <Button className="bg-accent" onClick={handleTranferClick}>
         Transfer
       </Button>
-      <p className="text-red-500">{uiError}</p>
-      <p className="text-green-500">{transactionHash}</p>
+      {uiError && <p className="text-red-500">{uiError}</p>}
+      {transactionHash && (
+        <p className="text-green-500 break-all">{transactionHash}</p>
+      )}
     </div>
   );
 };
