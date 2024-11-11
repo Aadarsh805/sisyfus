@@ -88,13 +88,13 @@ export function computeStealthKey({
 }
 
 export function publicKeyToAddress({ publicKey }) {
-    // Use viem to convert the public key to an address
-    return publicKeyToAddressViem(
-      typeof publicKey !== "string"
-        ? bytesToHex(publicKey)
-        : publicKey.replace("0x", "")
-    );
-  }
+  // Use viem to convert the public key to an address
+  return publicKeyToAddressViem(
+    typeof publicKey !== "string"
+      ? bytesToHex(publicKey)
+      : publicKey.replace("0x", "")
+  );
+}
 
 export function getHashedSharedSecret({ sharedSecret }) {
   return keccak256(sharedSecret);
