@@ -23,7 +23,8 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^2.21.44",
-    "wagmi": "^2.12.29"
+    "wagmi": "^2.12.29",
+    "web3": "^4.15.0"
   },
   "devDependencies": {
     "@types/node": "^20",
