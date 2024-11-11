@@ -7,36 +7,37 @@ import { REGISTRY_CONTRACT } from "@/constants";
 import { abi as RegistryABI } from "../../contracts/Registry.json";
 import { useEthersSigner } from "@/lib/useEthersSigner";
 import { ethers } from "ethers";
-import { useAccount } from "wagmi";
+import { Button } from "../components/ui/button";
 
 export default function page() {
   const signer = useEthersSigner();
 
-  const { isConnecting, isConnected } = useAccount();
+  const [myStealthMetaDataString, setMyStealthMetaDataString] = useState("");
 
   useEffect(() => {
-    if (isConnecting || !isConnected) return;
-    console.log(signer?.address);
     // 1. Check if local storage has stealth meta data
     let stealthMetaDataString = window.localStorage.getItem("stealthMetaData");
 
-    // if (stealthMetaDataString) return;
-    // 2. Create Stealth meta data
+    setMyStealthMetaDataString(stealthMetaDataString!);
+  }, []);
+
+  const generateMyStealth = async () => {
+    console.log("testin");
     const stealthMetaData = generateRandomStealthMetaAddress();
 
     // 3. Store the stealthMetaData address into contract
     const stealthMetaAddress = stealthMetaData[4];
     console.log(stealthMetaAddress);
-    updateStealthAddress(stealthMetaAddress, stealthMetaData);
+    await updateStealthAddress(stealthMetaAddress);
 
     // 4. Store the generated metadata into local db
-    // Added inside updateStealthAddress
-  }, [isConnecting, isConnected]);
+    window.localStorage.setItem(
+      "stealthMetaData",
+      JSON.stringify({ data: stealthMetaData })
+    );
+  };
 
-  async function updateStealthAddress(
-    stealthMetaAddress: string,
-    stealthMetaData: string[]
-  ) {
+  async function updateStealthAddress(stealthMetaAddress: string) {
     try {
       const registryContract = new ethers.Contract(
         REGISTRY_CONTRACT,
@@ -49,11 +50,6 @@ export default function page() {
       );
       console.log({ tx });
       await tx.wait();
-
-      window.localStorage.setItem(
-        "stealthMetaData",
-        JSON.stringify({ data: stealthMetaData })
-      );
     } catch (error) {
       console.log({ error });
     }
@@ -63,7 +59,11 @@ export default function page() {
     <div className="h-screen flex flex-col  w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
       <AppNavbar />
       <div className="flex flex-col justify-center items-center w-full h-[calc(100vh-16rem)] gap-6">
-        <AppTabs />
+        {myStealthMetaDataString ? (
+          <AppTabs />
+        ) : (
+          <Button onClick={generateMyStealth}>Generate Stealth Address</Button>
+        )}
       </div>
     </div>
   );
