@@ -6,6 +6,11 @@
 					"internalType": "address",
 					"name": "stealthAddress",
 					"type": "address"
+				},
+				{
+					"internalType": "string",
+					"name": "stealthPublicKey",
+					"type": "string"
 				}
 			],
 			"name": "deposit",
@@ -24,9 +29,9 @@
 			"name": "deposits",
 			"outputs": [
 				{
-					"internalType": "address",
+					"internalType": "string",
 					"name": "",
-					"type": "address"
+					"type": "string"
 				}
 			],
 			"stateMutability": "view",
@@ -48,9 +53,9 @@
 			"name": "getDeposits",
 			"outputs": [
 				{
-					"internalType": "address[]",
+					"internalType": "string[]",
 					"name": "",
-					"type": "address[]"
+					"type": "string[]"
 				}
 			],
 			"stateMutability": "view",
@@ -70,6 +75,19 @@
 					"internalType": "string",
 					"name": "",
 					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "totalDeposits",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",

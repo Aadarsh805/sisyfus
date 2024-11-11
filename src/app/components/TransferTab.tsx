@@ -36,8 +36,7 @@ export const TransferTab = () => {
 
   const handleTranferClick = async () => {
     // 1. Get stealth metadata address of the receiver from contract
-    let testMetaAddress =
-      "st:eth:0x02f8364efabd9694abf56d503e4a18b09b41d78b37289599c7d6487e4828446b6a020cd51a5583c7b2aeab902f46078aeeab600e4228c8f158dd815f15f9fac825f9";
+    let testMetaAddress = recipientStealthAddress;
     testMetaAddress = testMetaAddress.replace("st:eth:", "");
     const spendingPublicKey = testMetaAddress.substring(0, 68);
     const viewingPublicKey = "0x" + testMetaAddress.substring(68);
@@ -68,7 +67,7 @@ export const TransferTab = () => {
       signer
     );
     try {
-      const tx = await registryContract.deposit(stealthAddress, {
+      const tx = await registryContract.deposit(stealthAddress, ephemeralPublicKey, {
         value: ethers.parseEther(transferAmount.toString()),
       });
       setTransactionHash(tx.hash);
