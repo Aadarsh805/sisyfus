@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -98,10 +99,10 @@ export const TransferTab = () => {
           type="number"
           onChange={handleTransferAmountInputChange}
           value={transferAmount}
-          placeholder="Recipient Stealth Meta Address"
+          placeholder="0"
           className="w-full"
         />
-        <span className="">cBtc</span>
+        <span className="">cBTC</span>
       </div>
 
       <Button className="bg-accent" onClick={handleTranferClick}>
