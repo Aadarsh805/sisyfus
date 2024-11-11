@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import { Button } from "./ui/button";
 import { REGISTRY_CONTRACT } from "@/constants";
-import { ethers } from "ethers";
 import { abi as RegistryABI } from "../../contracts/Registry.json";
-import { Web3, Contract } from "web3";
+import { Web3 } from "web3";
+import { computeStealthKey } from "@/utils/crypto";
+import { getStealthMetaData } from "@/utils/stealthMetaData";
+import { privateKeyToAddress } from "viem/accounts";
+import BN from "bn.js";
+import { TWallet } from "@/types/Wallet";
 
 export const WithdrawTab = () => {
   const web3 = new Web3(
@@ -16,15 +20,46 @@ export const WithdrawTab = () => {
 
   async function fetchAllWithdraws() {
     try {
+      const stealthMetaData = getStealthMetaData();
+      if (!stealthMetaData)
+        return alert("Local stealth meta data is not there.");
+      const spendingPrivateKey = stealthMetaData[0];
+      const viewingPrivateKey = stealthMetaData[1];
       const registryContract = new web3.eth.Contract(
         RegistryABI,
         REGISTRY_CONTRACT
       );
-      // const totalDeposits = await registryContract.methods.deposits().call();
-      // console.log(totalDeposits)
+      const totalDepositsInBn: bigint = await registryContract.methods
+        .totalDeposits()
+        .call();
+      const totalDeposits = parseInt(totalDepositsInBn.toString());
       // Start index and end index should be cached on local storage and should be dynamically updated based on previous scan
-      const deposits = await registryContract.methods.getDeposits(0, 2).call();
-      console.log(deposits);
+      const deposits: string[] = await registryContract.methods
+        .getDeposits(0, totalDeposits)
+        .call();
+      const myWallets: TWallet[] = [];
+      deposits.forEach(async (ephemeralPublicKey) => {
+        const computedStealthKey = computeStealthKey({
+          ephemeralPublicKey,
+          spendingPrivateKey,
+          viewingPrivateKey,
+        });
+        console.log(computedStealthKey);
+        const stealthAddress = privateKeyToAddress(
+          `0x${computedStealthKey.replace("0x", "")}`
+        );
+        const balanceBI: BigInt = await web3.eth.getBalance(stealthAddress);
+        const balance = new BN(balanceBI.toString());
+        const zeroBI = new BN("0");
+        if (balance > zeroBI) {
+          myWallets.push({
+            address: stealthAddress,
+            privateKey: computedStealthKey,
+            balance: Web3.utils.fromWei(balanceBI.toString(), "ether"),
+          });
+        }
+        console.log(myWallets);
+      });
     } catch (error) {
       console.log({ error });
     }
