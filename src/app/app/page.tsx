@@ -16,6 +16,7 @@ export default function page() {
   const signer = useEthersSigner();
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [myStealthMetaAdress, setMyStealthMetaAdress] = useState("");
 
   const [myStealthMetaDataString, setMyStealthMetaDataString] = useState("");
 
@@ -66,19 +67,24 @@ export default function page() {
     }
   }
 
-  // const myStealthMetaData = getStealthMetaData();
+  useEffect(() => {
+    const myStealthMetaData = getStealthMetaData();
+    const myStealthMetaAdress = myStealthMetaData?.[4];
 
-  // const myStealthMetaAdress = myStealthMetaData?.[4];
+    setMyStealthMetaAdress(myStealthMetaAdress!);
+  }, [])
+  
 
-  // const handleCopyToClipboard = () => {
-  //   navigator.clipboard.writeText(myStealthMetaAdress!);
-  //   setIsCopied(true);
 
-  //   setIsCopied(true);
-  //   setTimeout(() => {
-  //     setIsCopied(false);
-  //   }, 2000);
-  // };
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(myStealthMetaAdress!);
+    setIsCopied(true);
+
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
+  };
 
   return (
     <div className="h-screen flex flex-col w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
@@ -87,7 +93,7 @@ export default function page() {
         {myStealthMetaDataString ? (
           <div className="flex-col gap-4 items-center">
             <AppTabs />
-            {/* <p className="flex flex-col gap-2 mt-2">
+            <p className="flex flex-col gap-2 mt-2">
               Your Stealth Meta Address:{" "}
               <span
                 onClick={handleCopyToClipboard}
@@ -95,7 +101,7 @@ export default function page() {
               >
                 {isCopied ? "Copied!" : myStealthMetaAdress}
               </span>
-            </p> */}
+            </p>
           </div>
         ) : (
           <Button
