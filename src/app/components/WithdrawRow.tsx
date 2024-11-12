@@ -1,3 +1,5 @@
+'use client'
+
 import { TWallet } from "@/types/Wallet";
 import React, { useState } from "react";
 import { Button } from "./ui/button";

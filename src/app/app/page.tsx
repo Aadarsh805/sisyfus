@@ -1,10 +1,11 @@
 "use client";
+
 import { AppTabs } from "../components/AppTabs";
 import { AppNavbar } from "../components/AppNavbar";
 import { useEffect, useState } from "react";
 import { generateRandomStealthMetaAddress } from "@/utils/crypto";
 import { REGISTRY_CONTRACT } from "@/constants";
-import { abi as RegistryABI } from "../../contracts/Registry.json";
+import RegistryAbi from "../../contracts/Registry.json";
 import { useEthersSigner } from "@/lib/useEthersSigner";
 import { ethers } from "ethers";
 import { Button } from "../components/ui/button";
@@ -49,7 +50,7 @@ export default function page() {
     try {
       const registryContract = new ethers.Contract(
         REGISTRY_CONTRACT,
-        RegistryABI,
+        RegistryAbi.abi,
         signer
       );
       const tx = await registryContract.updateStealthMetaAddress(
@@ -65,19 +66,19 @@ export default function page() {
     }
   }
 
-  const myStealthMetaData = getStealthMetaData();
+  // const myStealthMetaData = getStealthMetaData();
 
-  const myStealthMetaAdress = myStealthMetaData?.[4];
+  // const myStealthMetaAdress = myStealthMetaData?.[4];
 
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(myStealthMetaAdress!);
-    setIsCopied(true);
+  // const handleCopyToClipboard = () => {
+  //   navigator.clipboard.writeText(myStealthMetaAdress!);
+  //   setIsCopied(true);
 
-    setIsCopied(true);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
-  };
+  //   setIsCopied(true);
+  //   setTimeout(() => {
+  //     setIsCopied(false);
+  //   }, 2000);
+  // };
 
   return (
     <div className="h-screen flex flex-col w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
@@ -86,17 +87,15 @@ export default function page() {
         {myStealthMetaDataString ? (
           <div className="flex-col gap-4 items-center">
             <AppTabs />
-            <p className="flex flex-col gap-2 mt-2">
+            {/* <p className="flex flex-col gap-2 mt-2">
               Your Stealth Meta Address:{" "}
               <span
                 onClick={handleCopyToClipboard}
                 className="cursor-pointer break-all max-w-96"
               >
-                {
-                  isCopied ? "Copied!" : myStealthMetaAdress
-                }
+                {isCopied ? "Copied!" : myStealthMetaAdress}
               </span>
-            </p>
+            </p> */}
           </div>
         ) : (
           <Button

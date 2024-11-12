@@ -1,7 +1,9 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { REGISTRY_CONTRACT } from "@/constants";
-import { abi as RegistryABI } from "../../contracts/Registry.json";
+import RegistryABI from "../../contracts/Registry.json";
 import Web3 from "web3";
 import { computeStealthKey } from "@/utils/crypto";
 import { getStealthMetaData } from "@/utils/stealthMetaData";
@@ -28,7 +30,7 @@ export const WithdrawTab = () => {
 
       const [spendingPrivateKey, viewingPrivateKey] = stealthMetaData;
       const registryContract = new web3.eth.Contract(
-        RegistryABI,
+        RegistryABI.abi,
         REGISTRY_CONTRACT
       );
       const totalDepositsInBn: bigint = await registryContract.methods
