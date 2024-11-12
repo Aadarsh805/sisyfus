@@ -44,6 +44,9 @@ export default function page() {
         JSON.stringify({ data: stealthMetaData })
       );
       setIsLoading(false);
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
     }
   };
 
@@ -72,9 +75,7 @@ export default function page() {
     const myStealthMetaAdress = myStealthMetaData?.[4];
 
     setMyStealthMetaAdress(myStealthMetaAdress!);
-  }, [])
-  
-
+  }, []);
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(myStealthMetaAdress!);
