@@ -15,6 +15,11 @@ import { CITREA_RPC, WITHDRAW_ADDRESS } from "@/constants";
 import { parseEther } from "ethers";
 import Web3 from "web3";
 import { useSendTransaction } from "wagmi";
+import { WITHDRAW_ADDRESS } from "@/constants";
+import { parseEther } from "ethers";
+import Web3 from "web3";
+import { useSendTransaction } from "wagmi";
+import { useToast } from "@/hooks/use-toast";
 
 type WithdrawRowProps = {
   wallet: TWallet;
@@ -53,6 +58,9 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
   const [transactionHash, setTransactionHash] = useState("");
   const [uiError, setUiError] = useState("");
   const [isLaoding, setIsLoading] = useState(false);
+  const { sendTransactionAsync } = useSendTransaction();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -86,6 +94,9 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
       return;
     }
 
+    console.log({ recipientStealthAddress }, wallet.balance);
+
+    // makeWithdrawTransaction(recipientStealthAddress, wallet.balance);
     // todo
     await makeWithdrawTransaction(
       recipientStealthAddress,
@@ -121,14 +132,24 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
       const tx = await web3.eth.sendSignedTransaction(txRaw.rawTransaction);
       console.log(`Transaction Hash: ${tx.transactionHash}\n`);
       setIsLoading(false);
-      alert("Funds sent to :" + btcAddress);
+         
+      setIsDialogOpen(false);
+
+      toast({
+        title: "Funds sent to :" + btcAddress,
+      });
     } catch (error) {
       console.log({ error });
     }
   }
 
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen((prev) => !prev);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={handleDialogOpen}>
       <DialogTrigger>
         <Button size={"sm"} className=" py-0 bg-accent w-fit text-xs">
           Withdraw
@@ -144,7 +165,7 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
               type="text"
               onChange={handleInputChange}
               value={recipientStealthAddress}
-              placeholder="Recipient Stealth Meta Address"
+              placeholder="Your Bitcoin Address"
               className="w-full text-black"
             />
             <div className="flex gap-2 items-end justify-end">
