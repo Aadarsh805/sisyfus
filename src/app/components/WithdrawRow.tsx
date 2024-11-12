@@ -16,6 +16,7 @@ import { useSendTransaction } from "wagmi";
 import { parseEther } from "ethers";
 import Web3 from "web3";
 import { useToast } from "@/hooks/use-toast";
+import { Loader } from "lucide-react";
 
 type WithdrawRowProps = {
   wallet: TWallet;
@@ -53,7 +54,7 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
   const [transferAmount, setTransferAmount] = useState(0);
   const [transactionHash, setTransactionHash] = useState("");
   const [uiError, setUiError] = useState("");
-  const [isLaoding, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { sendTransactionAsync } = useSendTransaction();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -174,8 +175,12 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
               <span className="">cBtc</span>
             </div>
             <p>Total balance: {wallet.balance}cBTC</p>
-            <Button className="bg-accent" onClick={handleWithdrawClick}>
+            <Button
+              className="bg-accent flex items-center gap-2"
+              onClick={handleWithdrawClick}
+            >
               Withdraw
+              {isLoading ? <Loader className="size-8 animate-spin" /> : null}
             </Button>
             {uiError && <p className="text-red-500">{uiError}</p>}
             {transactionHash && (
