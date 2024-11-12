@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sisyfus🍊
 
-## Getting Started
+Sisyfus, rolling Bitcoin privacy forward with programmable stealth addresses on [Citrea](https://citrea.xyz/). Cheap and native Bitcoin stealth address achieved through verifieble off-chain cryptography.
+![Discord Image 1](https://dedocker-39fa247e-ae01-4a2f-ad9d-1b91e6f9e0c0-a76b82.spheron.app/Screenshot_119.png)
 
-First, run the development server:
+# Get Started
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The product contains three code bases, a Registry contract to maintain stealth meta addresses, and client to generate and interact with the stealth address. The relayer code base is still in progress. Also you may take a look at a crypto utility file inspired from [Umbra](https://www.umbra.cash/) to generate and handle stealth addresses.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. [Contracts](https://github.com/leostelon/sisyfus/tree/main/src/contracts)
+2. [CLI](https://github.com/leostelon/sisyfus)
+3. [Crypto](https://github.com/leostelon/sisyfus/blob/main/src/utils/crypto.js)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Website**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[Sisyfus.xyz](https://sisyfus.xyz)
 
-## Learn More
+# Technology
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js and Express.js server, hosted on **Spheron Decentralized Compute** [[know more]](https://spheron.network/#decentralised-compute)
+- Database, **Polybase** is the database for web3. [[know more]](https://polybase.xyz/) - Find schemas and logic [here](https://github.com/leostelon/dedock-server/tree/main/src/polybase).
+- Docker images are stored in Decentralized storage using **Spheron Storage SDK**, [[know more]](https://spheron.network/#storage-sdk)
+- React.js, hosted on **Spheron Decentralized Hosting** [[know more]](https://spheron.network/#decentralized-hosting)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Follow belows steps to run it locally.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Server⚙️
 
-## Deploy on Vercel
+⚠️Work in progress to build a relayer⚠️
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Client💻
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1.  Clone Repo.
+    > $ git clone https://github.com/leostelon/sisyfus sisyfus
+    > $ cd sisyfus
+2.  Change the contract address to the one you have deployed or use the one which already exists. (Optional)Add the .env file in the root directory. Replace the value accordingly.
+
+          REGISTRY_CONTRACT=<< YOU CA HERE>>
+
+3.  Run client!
+    > $ npm run dev
+
+## Todo👨‍💻
+
+- [x] MVP
+- [x] Registry
+- [ ] Simple relayer using bitcoin webhooks.
+- [ ] Trusted Relayer.

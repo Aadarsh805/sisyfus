@@ -1,18 +1,28 @@
+"use client";
+
 import { LandingPageNavbar } from "../app/components/LandingPageNavbar";
 import { Button, buttonVariants } from "../app/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
     <div className="h-screen flex flex-col  w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
       <LandingPageNavbar />
-      <div className="flex flex-col justify-center items-center w-full h-[calc(100vh-12rem)] gap-6">
+      <motion.div
+        initial={{ opacity: 0, y: 400 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          ease: "linear",
+          duration: .5,
+        }}
+        className="flex flex-col justify-center items-center w-full h-[calc(100vh-12rem)] gap-6"
+      >
         <h1 className="text-center text-7xl text-white font-extralight tracking-tighter">
-          Rolling <span className="text-accent">Bitcoin</span> <br/> Privacy Forward
-          with <br /> Untraceable
-          Stealth Addresses <br/> on <span className="text-accent">Citrea</span>
-
+          Rolling <span className="text-accent">Bitcoin</span> <br /> Privacy
+          Forward with <br /> Untraceable Stealth Addresses <br /> on{" "}
+          <span className="text-accent">Citrea</span>
           <br />
         </h1>
         <p className="text-sm text-white opacity-30 text-center max-w-[50rem]">
@@ -36,7 +46,7 @@ export default function Home() {
             Get Started
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
