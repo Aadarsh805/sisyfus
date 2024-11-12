@@ -12,13 +12,9 @@ import {
 import { Input } from "./ui/input";
 import { useEthersSigner } from "@/lib/useEthersSigner";
 import { CITREA_RPC, WITHDRAW_ADDRESS } from "@/constants";
+import { useSendTransaction } from "wagmi";
 import { parseEther } from "ethers";
 import Web3 from "web3";
-import { useSendTransaction } from "wagmi";
-import { WITHDRAW_ADDRESS } from "@/constants";
-import { parseEther } from "ethers";
-import Web3 from "web3";
-import { useSendTransaction } from "wagmi";
 import { useToast } from "@/hooks/use-toast";
 
 type WithdrawRowProps = {
@@ -132,7 +128,7 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
       const tx = await web3.eth.sendSignedTransaction(txRaw.rawTransaction);
       console.log(`Transaction Hash: ${tx.transactionHash}\n`);
       setIsLoading(false);
-         
+
       setIsDialogOpen(false);
 
       toast({
@@ -142,7 +138,6 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
       console.log({ error });
     }
   }
-
 
   const handleDialogOpen = () => {
     setIsDialogOpen((prev) => !prev);
