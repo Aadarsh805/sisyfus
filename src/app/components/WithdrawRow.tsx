@@ -5,12 +5,16 @@ import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "./ui/input";
+import { useEthersSigner } from "@/lib/useEthersSigner";
+import { CITREA_RPC, WITHDRAW_ADDRESS } from "@/constants";
+import { parseEther } from "ethers";
+import Web3 from "web3";
+import { useSendTransaction } from "wagmi";
 
 type WithdrawRowProps = {
   wallet: TWallet;
@@ -48,6 +52,7 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
   const [transferAmount, setTransferAmount] = useState(0);
   const [transactionHash, setTransactionHash] = useState("");
   const [uiError, setUiError] = useState("");
+  const [isLaoding, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -63,9 +68,9 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
     setTransferAmount(+e.target.value);
   };
 
-  const handleWithdrawClick = () => {
+  const handleWithdrawClick = async () => {
     if (!recipientStealthAddress) {
-      setUiError("Recipient stealth address is required");
+      setUiError("Bitcoin address is required");
       return;
     }
     if (!transferAmount) {
@@ -82,7 +87,45 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
     }
 
     // todo
+    await makeWithdrawTransaction(
+      recipientStealthAddress,
+      wallet.privateKey,
+      wallet.address
+    );
   };
+
+  async function makeWithdrawTransaction(
+    btcAddress: string,
+    pvtKey: string,
+    address: string
+  ) {
+    try {
+      setIsLoading(true);
+      const web3 = new Web3(new Web3.providers.HttpProvider(CITREA_RPC));
+      const txObj: any = {
+        to: WITHDRAW_ADDRESS,
+        value: parseEther("0.0001"),
+        data: Web3.utils.toHex(btcAddress),
+        from: address,
+      };
+      const gasPrice = await web3.eth.getGasPrice();
+      txObj.gasPrice = gasPrice;
+      let gas = await web3.eth.estimateGas(txObj);
+      txObj.gas = gas;
+      const gasCost = BigInt(gasPrice) * BigInt(gas);
+      const balance = await web3.eth.getBalance(address);
+      const amountToSend = BigInt(balance) - gasCost;
+      txObj.value = amountToSend;
+
+      const txRaw = await web3.eth.accounts.signTransaction(txObj, pvtKey);
+      const tx = await web3.eth.sendSignedTransaction(txRaw.rawTransaction);
+      console.log(`Transaction Hash: ${tx.transactionHash}\n`);
+      setIsLoading(false);
+      alert("Funds sent to :" + btcAddress);
+    } catch (error) {
+      console.log({ error });
+    }
+  }
 
   return (
     <Dialog>
