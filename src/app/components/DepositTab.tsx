@@ -23,7 +23,6 @@ export const DepositTab = () => {
         asperiores pariatur perferendis laboriosam sunt! Inventore enim saepe
       </p>
 
-      {isConnected ? (
         <Link
           href="https://citrea.xyz/bridge"
           target="_blank"
@@ -31,9 +30,6 @@ export const DepositTab = () => {
         >
           Deposit
         </Link>
-      ) : (
-        <ConnectButton />
-      )}
     </div>
   );
 };

@@ -13,6 +13,8 @@ import { abi as RegistryABI } from "../../contracts/Registry.json";
 import { useEthersSigner } from "@/lib/useEthersSigner";
 import { REGISTRY_CONTRACT } from "@/constants";
 import { Loader, Loader2 } from "lucide-react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 export const TransferTab = () => {
   const [recipientStealthAddress, setRecipientStealthAddress] = useState("");
@@ -22,6 +24,7 @@ export const TransferTab = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const signer = useEthersSigner();
+  const {isConnected} = useAccount()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -113,10 +116,17 @@ export const TransferTab = () => {
         <span className="">cBTC</span>
       </div>
 
-      <Button className="bg-accent flex items-center gap-2" onClick={handleTranferClick}>
-        Transfer
-        {isLoading ? <Loader className="size-8 animate-spin" /> : null}
-      </Button>
+      {isConnected ? (
+        <Button
+          className="bg-accent flex items-center gap-2"
+          onClick={handleTranferClick}
+        >
+          Transfer
+          {isLoading ? <Loader className="size-8 animate-spin" /> : null}
+        </Button>
+      ) : (
+        <ConnectButton />
+      )}
       {uiError && <p className="text-red-500">{uiError}</p>}
       {transactionHash && (
         <p className="text-green-500 break-all">{transactionHash}</p>
