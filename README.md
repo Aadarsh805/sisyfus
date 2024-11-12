@@ -1,7 +1,8 @@
 # Sisyfus🍊
 
 Sisyfus, rolling Bitcoin privacy forward with programmable stealth addresses on [Citrea](https://citrea.xyz/). Cheap and native Bitcoin stealth address achieved through verifieble off-chain cryptography.
-![Discord Image 1](https://dedocker-39fa247e-ae01-4a2f-ad9d-1b91e6f9e0c0-a76b82.spheron.app/Screenshot_119.png)
+
+![image](https://github.com/user-attachments/assets/db25f007-090a-4137-ad3b-04a7a0a48a27)
 
 # Get Started
 
