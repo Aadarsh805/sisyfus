@@ -9,10 +9,12 @@ import { useEthersSigner } from "@/lib/useEthersSigner";
 import { ethers } from "ethers";
 import { Button } from "../components/ui/button";
 import { Loader } from "lucide-react";
+import { getStealthMetaData } from "@/utils/stealthMetaData";
 
 export default function page() {
   const signer = useEthersSigner();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const [myStealthMetaDataString, setMyStealthMetaDataString] = useState("");
 
@@ -63,12 +65,39 @@ export default function page() {
     }
   }
 
+  const myStealthMetaData = getStealthMetaData();
+
+  const myStealthMetaAdress = myStealthMetaData?.[4];
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(myStealthMetaAdress!);
+    setIsCopied(true);
+
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
+  };
+
   return (
     <div className="h-screen flex flex-col w-full bg-[url('../../public/bg.svg')] bg-cover bg-center bg-no-repeat">
       <AppNavbar />
       <div className="flex flex-col justify-start items-center w-full mt-20 gap-6">
         {myStealthMetaDataString ? (
-          <AppTabs />
+          <div className="flex-col gap-4 items-center">
+            <AppTabs />
+            <p className="flex flex-col gap-2 mt-2">
+              Your Stealth Meta Address:{" "}
+              <span
+                onClick={handleCopyToClipboard}
+                className="cursor-pointer break-all max-w-96"
+              >
+                {
+                  isCopied ? "Copied!" : myStealthMetaAdress
+                }
+              </span>
+            </p>
+          </div>
         ) : (
           <Button
             onClick={generateMyStealth}
