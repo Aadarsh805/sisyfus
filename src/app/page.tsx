@@ -15,7 +15,7 @@ export default function Home() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{
           ease: "linear",
-          duration: .5,
+          duration: 0.5,
         }}
         className="flex flex-col justify-center items-center w-full h-[calc(100vh-12rem)] gap-6"
       >
@@ -32,16 +32,16 @@ export default function Home() {
           Ratione?
         </p>
         <div className="flex items-center gap-8">
-          <Button
-            className="border-1 borer-accent text-white font-bold bg-accent-foreground"
-            variant="outline"
-          >
-            Learn More
-          </Button>
           <Link
             href="https://github.com/leostelon/sisyfus"
-            className={cn(buttonVariants({}), "bg-accent text-white font-bold")}
+            className={cn(buttonVariants({}), " text-white font-bold")}
             target="_blank"
+          >
+            Learn more
+          </Link>
+          <Link
+            href="/app"
+            className={cn(buttonVariants({}), "bg-accent text-white font-bold")}
           >
             Get Started
           </Link>

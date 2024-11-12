@@ -11,6 +11,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "./ui/input";
+import { WITHDRAW_ADDRESS } from "@/constants";
+import { parseEther } from "ethers";
+import Web3 from "web3";
+import { useSendTransaction } from "wagmi";
 
 type WithdrawRowProps = {
   wallet: TWallet;
@@ -48,6 +52,8 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
   const [transferAmount, setTransferAmount] = useState(0);
   const [transactionHash, setTransactionHash] = useState("");
   const [uiError, setUiError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { sendTransactionAsync } = useSendTransaction();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -81,8 +87,28 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
       return;
     }
 
+    console.log({ recipientStealthAddress }, wallet.balance);
+
+    // makeWithdrawTransaction(recipientStealthAddress, wallet.balance);
     // todo
   };
+
+  async function makeWithdrawTransaction(btcAddress: string, balance: string) {
+    try {
+      setIsLoading(true);
+      console.log("adfslk");
+
+      await sendTransactionAsync({
+        to: WITHDRAW_ADDRESS as `0x${string}`,
+        value: parseEther(balance),
+        data: Web3.utils.toHex(btcAddress).replace("0x", "") as `0x${string}`,
+      });
+      setIsLoading(false);
+      alert("Funds sent to :" + btcAddress);
+    } catch (error) {
+      console.log({ error });
+    }
+  }
 
   return (
     <Dialog>
@@ -101,7 +127,7 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
               type="text"
               onChange={handleInputChange}
               value={recipientStealthAddress}
-              placeholder="Recipient Stealth Meta Address"
+              placeholder="Your Bitcoin Address"
               className="w-full text-black"
             />
             <div className="flex gap-2 items-end justify-end">
