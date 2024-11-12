@@ -15,6 +15,7 @@ import { WITHDRAW_ADDRESS } from "@/constants";
 import { parseEther } from "ethers";
 import Web3 from "web3";
 import { useSendTransaction } from "wagmi";
+import { useToast } from "@/hooks/use-toast";
 
 type WithdrawRowProps = {
   wallet: TWallet;
@@ -54,6 +55,8 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
   const [uiError, setUiError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { sendTransactionAsync } = useSendTransaction();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -104,14 +107,22 @@ const WithdrawButtonModal = ({ wallet }: { wallet: TWallet }) => {
         data: Web3.utils.toHex(btcAddress).replace("0x", "") as `0x${string}`,
       });
       setIsLoading(false);
-      alert("Funds sent to :" + btcAddress);
+      setIsDialogOpen(false);
+
+      toast({
+        title: "Funds sent to :" + btcAddress,
+      });
     } catch (error) {
       console.log({ error });
     }
   }
 
+  const handleDialogOpen = () => {
+    setIsDialogOpen((prev) => !prev);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={handleDialogOpen}>
       <DialogTrigger>
         <Button size={"sm"} className=" py-0 bg-accent w-fit text-xs">
           Withdraw
