@@ -9,20 +9,22 @@ export const LandingPageNavbar = () => {
   return (
     <div className="py-6 px-32 flex items-center justify-between w-full">
       {/* logo */}
-      <div className="logo flex items-center gap-2">
+      <Link className="logo flex items-center gap-2" href={"/"}>
         <Image
           src={logo}
           alt="logo"
           className="w-10 aspect-1 border-[1px] border-accent rounded-full"
         />
         <div className="text-white text-lg font-bold">Sisyphus Protocol</div>
-      </div>
+      </Link>
       {/* navlinks */}
       <div className="flex gap-4 items-center justify-between">
-        <div className="text-white text-sm font-light">Home</div>
-        <div className="text-white text-sm font-light">About</div>
-        <div className="text-white text-sm font-light">Product</div>
-        <div className="text-white text-sm font-light">Contact</div>
+        <Link className="text-white text-sm font-light" href={"/"}>
+          Home
+        </Link>
+        <Link className="text-white text-sm font-light" href={"/app"}>
+          App
+        </Link>
       </div>
       {/* cta */}
       <Link
