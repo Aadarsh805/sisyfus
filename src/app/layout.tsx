@@ -10,7 +10,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "BitcoinHack",
+  title: "Sisyfus",
 };
 
 export default function RootLayout({

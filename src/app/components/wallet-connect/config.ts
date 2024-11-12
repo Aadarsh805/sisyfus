@@ -19,7 +19,7 @@ const CitreaTestnet = {
 } as const satisfies Chain;
 
 export const config = getDefaultConfig({
-  appName: "Bitcoinhack",
+  appName: "Sisyfus",
   projectId,
   chains: [CitreaTestnet],
   ssr: true,
