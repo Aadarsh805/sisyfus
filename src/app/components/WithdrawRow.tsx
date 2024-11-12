@@ -36,7 +36,9 @@ export const WithdrawRow = ({ wallet, i, myWallets }: WithdrawRowProps) => {
           <ExportPrivateKeyModal wallet={wallet} />
         </div>
       </div>
-      {i < myWallets.length -1 && <div className="w-full h-[1px] bg-black"></div>}
+      {i < myWallets.length - 1 && (
+        <div className="w-full h-[1px] bg-black"></div>
+      )}
     </div>
   );
 };

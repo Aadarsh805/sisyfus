@@ -8,9 +8,11 @@ import { abi as RegistryABI } from "../../contracts/Registry.json";
 import { useEthersSigner } from "@/lib/useEthersSigner";
 import { ethers } from "ethers";
 import { Button } from "../components/ui/button";
+import { Loader } from "lucide-react";
 
 export default function page() {
   const signer = useEthersSigner();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [myStealthMetaDataString, setMyStealthMetaDataString] = useState("");
 
@@ -22,6 +24,7 @@ export default function page() {
   }, []);
 
   const generateMyStealth = async () => {
+    setIsLoading(true);
     console.log("testin");
     const stealthMetaData = generateRandomStealthMetaAddress();
 
@@ -36,6 +39,7 @@ export default function page() {
         "stealthMetaData",
         JSON.stringify({ data: stealthMetaData })
       );
+      setIsLoading(false);
     }
   };
 
@@ -66,7 +70,13 @@ export default function page() {
         {myStealthMetaDataString ? (
           <AppTabs />
         ) : (
-          <Button onClick={generateMyStealth}>Generate Stealth Address</Button>
+          <Button
+            onClick={generateMyStealth}
+            className="flex items-center gap-2"
+          >
+            Generate Stealth Address
+            {isLoading ? <Loader className="size-8 animate-spin" /> : null}
+          </Button>
         )}
       </div>
     </div>

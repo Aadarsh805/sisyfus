@@ -72,10 +72,16 @@ export const WithdrawTab = () => {
     }
   }
 
+  const totalBalance = myWallets.reduce(
+    (acc, curr) => acc + Number(curr.balance),
+    0
+  );
+  
   return (
     <div className="w-full p-8 rounded-lg bg-white text-black flex flex-col justify-between gap-8">
       <h3 className="font-extrabold text-center w-full">Withdraw</h3>
       <div className="flex flex-col gap-3 w-full">
+        <p>Total Balance: {totalBalance.toFixed(6)}</p>
         {myWallets.map((wallet, i) => (
           <WithdrawRow key={i} wallet={wallet} i={i} myWallets={myWallets} />
         ))}

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -13,12 +12,15 @@ import {
 import { abi as RegistryABI } from "../../contracts/Registry.json";
 import { useEthersSigner } from "@/lib/useEthersSigner";
 import { REGISTRY_CONTRACT } from "@/constants";
+import { Loader, Loader2 } from "lucide-react";
 
 export const TransferTab = () => {
   const [recipientStealthAddress, setRecipientStealthAddress] = useState("");
   const [transferAmount, setTransferAmount] = useState(0);
   const [transactionHash, setTransactionHash] = useState("");
   const [uiError, setUiError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const signer = useEthersSigner();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +38,7 @@ export const TransferTab = () => {
   };
 
   const handleTranferClick = async () => {
+    setIsLoading(true);
     // 1. Get stealth metadata address of the receiver from contract
     let testMetaAddress = recipientStealthAddress;
     testMetaAddress = testMetaAddress.replace("st:eth:", "");
@@ -68,10 +71,15 @@ export const TransferTab = () => {
       signer
     );
     try {
-      const tx = await registryContract.deposit(stealthAddress, ephemeralPublicKey, {
-        value: ethers.parseEther(transferAmount.toString()),
-      });
+      const tx = await registryContract.deposit(
+        stealthAddress,
+        ephemeralPublicKey,
+        {
+          value: ethers.parseEther(transferAmount.toString()),
+        }
+      );
       setTransactionHash(tx.hash);
+      setIsLoading(false);
       await tx.wait();
       console.log("Funds sent to stealth address:", stealthAddress);
     } catch (error) {
@@ -105,8 +113,9 @@ export const TransferTab = () => {
         <span className="">cBTC</span>
       </div>
 
-      <Button className="bg-accent" onClick={handleTranferClick}>
+      <Button className="bg-accent flex items-center gap-2" onClick={handleTranferClick}>
         Transfer
+        {isLoading ? <Loader className="size-8 animate-spin" /> : null}
       </Button>
       {uiError && <p className="text-red-500">{uiError}</p>}
       {transactionHash && (

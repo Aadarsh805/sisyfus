@@ -9,9 +9,9 @@ export default function Home() {
       <LandingPageNavbar />
       <div className="flex flex-col justify-center items-center w-full h-[calc(100vh-16rem)] gap-6">
         <h1 className="text-center text-7xl text-white font-extralight tracking-tighter">
-          Discover the <br />
-          transformative power of <br />{" "}
-          <span className="text-accent">cryptocurrencies</span>
+          Rolling Privacy <br /> Forward with Untraceable <br />
+          <span className="text-accent">Bitcoin</span> Stealth Addresses
+          <br />
         </h1>
         <p className="text-sm text-white opacity-30 text-center max-w-[50rem]">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio
