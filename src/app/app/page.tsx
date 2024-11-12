@@ -11,12 +11,15 @@ import { ethers } from "ethers";
 import { Button } from "../components/ui/button";
 import { Loader } from "lucide-react";
 import { getStealthMetaData } from "@/utils/stealthMetaData";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 export default function page() {
   const signer = useEthersSigner();
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [myStealthMetaAdress, setMyStealthMetaAdress] = useState("");
+  const { isConnected } = useAccount();
 
   const [myStealthMetaDataString, setMyStealthMetaDataString] = useState("");
 
@@ -44,6 +47,9 @@ export default function page() {
         JSON.stringify({ data: stealthMetaData })
       );
       setIsLoading(false);
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
     }
   };
 
@@ -72,9 +78,7 @@ export default function page() {
     const myStealthMetaAdress = myStealthMetaData?.[4];
 
     setMyStealthMetaAdress(myStealthMetaAdress!);
-  }, [])
-  
-
+  }, []);
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(myStealthMetaAdress!);
@@ -103,7 +107,7 @@ export default function page() {
               </span>
             </p>
           </div>
-        ) : (
+        ) : isConnected ? (
           <Button
             onClick={generateMyStealth}
             className="flex items-center gap-2"
@@ -111,6 +115,8 @@ export default function page() {
             Generate Stealth Address
             {isLoading ? <Loader className="size-8 animate-spin" /> : null}
           </Button>
+        ) : (
+          <ConnectButton />
         )}
       </div>
     </div>
